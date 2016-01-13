@@ -104,6 +104,7 @@ class MaterialNodeBase extends GomlTreeNodeBase {
       converter: converter,
       value: initialValue,
       onchanged: (v) => {
+        debugger;
         this.targetMaterial.materialVariables[variableName] = v.Value;
       }
     };

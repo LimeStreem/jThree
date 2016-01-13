@@ -150,15 +150,15 @@ class Material extends JThreeObjectWithID {
     }
 
     private _whenMaterialVariableNotFound(renderer: BasicRenderer, pWrapper: ProgramWrapper, uniform: IVariableInfo): void {
-        switch (uniform.variableType) {
+        switch (uniform.variableType) {//TODO fix default values 
             case 'vec2':
                 pWrapper.uniformVector(uniform.variableName, new Vector2(0, 0));
                 return;
             case 'vec3':
-                pWrapper.uniformVector(uniform.variableName, new Vector3(0, 0, 0));
+                pWrapper.uniformVector(uniform.variableName, new Vector3(1, 1, 0));
                 return;
             case 'vec4':
-                pWrapper.uniformVector(uniform.variableName, new Vector4(0, 0, 0, 0));
+                pWrapper.uniformVector(uniform.variableName, new Vector4(1, 0, 0.3, 1));
                 return;
             case 'sampler2D':
                 let registerAnnotation = uniform.variableAnnotation["register"];
