@@ -104,10 +104,10 @@ class Vector3 extends VectorBase {
 
 
   public static min(v1: Vector3, v2: Vector3): Vector3 {
-    return new Vector3(VectorBase.fromGenerationFunction(v1, v2, (i, v1, v2) => Math.min(v1.rawElements[i], v2.rawElements[i])));
+    return new Vector3(VectorBase.fromGenerationFunction(v1, v2, (i, v1_, v2_) => Math.min(v1_.rawElements[i], v2_.rawElements[i])));
   }
   public static max(v1: Vector3, v2: Vector3): Vector3 {
-    return new Vector3(VectorBase.fromGenerationFunction(v1, v2, (i, v1, v2) => Math.max(v1.rawElements[i], v2.rawElements[i])));
+    return new Vector3(VectorBase.fromGenerationFunction(v1, v2, (i, v1_, v2_) => Math.max(v1_.rawElements[i], v2_.rawElements[i])));
   }
 
   public static angle(v1: Vector3, v2: Vector3): number {
