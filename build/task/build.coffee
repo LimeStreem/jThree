@@ -5,6 +5,7 @@ cached = require 'gulp-cached'
 gulp = require 'gulp'
 runSequence = require 'run-sequence'
 gulpif = require 'gulp-if'
+path = require 'path'
 
 class Build
 
@@ -47,6 +48,7 @@ class Build
             title: "ts"
           .pipe gulpif(c.sourcemap, sourcemaps.write())
           .pipe gulp.dest config.tsDest
+          .pipe gulp.dest path.resolve(config.tsCiDest, config.branch)
           .on 'end', ->
             unless config.buildSuccess
               gutil.log gutil.colors.black.bgRed " [COMPILATION FAILED] (main) #{c.name} "

@@ -64,6 +64,7 @@ config =
   cleaner_files_silent : ['./lib/**/*']
   tsEntries:['./src/**/*.ts']
   tsDest:'./lib'
+  tsCiDest: 'ci/'
   jsEntries:['./lib/**/*.js']
   tsBase:'./src'
   refsEntries:['./src/refs/**/*.ts']
