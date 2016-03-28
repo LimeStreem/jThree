@@ -39,13 +39,13 @@ class MaterialNodeBase<T extends Material> extends CoreRelatedNodeBase<T> {
    * Construct material. This method must be overridden.
    * @return {Material} [description]
    */
-  protected __setMaterial(material: T, callbackfn: () => void): void {
+  protected __setMaterial(material: T, callbackfn?: () => void): void {
     this.target = material;
     this._name = this.attributes.getValue("name");
     this.target.on("ready", () => {
       this._generateAttributeForPasses();
       this.nodeExport(this._name);
-      callbackfn();
+      if (callbackfn) { callbackfn(); }
     });
   }
 

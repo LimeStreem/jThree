@@ -71,6 +71,12 @@ class GomlAttribute extends JThreeObjectEEWithID {
     this.initialized = true;
   }
 
+  public set promise(promise: Promise<GomlAttribute>) {
+    if (this._nodeManager.attributePromiseRegistry.enabled) {
+      this._nodeManager.attributePromiseRegistry.register(promise, this);
+    }
+  }
+
   public get Name(): string {
     return this.id;
   }
