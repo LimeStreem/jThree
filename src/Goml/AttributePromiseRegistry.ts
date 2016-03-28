@@ -1,6 +1,5 @@
 import jThreeObject from "../Base/JThreeObject";
 import GomlAttribute from "./GomlAttribute";
-import Q from "q";
 
 class AttributePromiseRegistry extends jThreeObject {
   constructor() {
@@ -16,7 +15,7 @@ class AttributePromiseRegistry extends jThreeObject {
   /**
    * promise objects which is registed.
    */
-  private _promises: Q.Promise<GomlAttribute>[] = [];
+  private _promises: Promise<GomlAttribute>[] = [];
 
   /**
    * this flag is true when async method is called.
@@ -38,10 +37,10 @@ class AttributePromiseRegistry extends jThreeObject {
 
   /**
    * register promise object and expected callback arguments object when promise is resolved.
-   * @param {Q.Promise<GomlAttribute>} promise        [description]
+   * @param {Promise<GomlAttribute>}   promise        [description]
    * @param {GomlAttribute}            callbackObject [description]
    */
-  public register(promise: Q.Promise<GomlAttribute>, callbackObject: GomlAttribute): void {
+  public register(promise: Promise<GomlAttribute>, callbackObject: GomlAttribute): void {
     this._promises.push(promise);
     this._asyncObjects.push(callbackObject);
     if (this._asyncing) {

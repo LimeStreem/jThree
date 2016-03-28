@@ -4,7 +4,6 @@ import StringAttributeConverter from "./Converter/StringAttributeConverter";
 import JThreeContext from "../JThreeContext";
 import NodeManager from "./NodeManager";
 import ContextComponents from "../ContextComponents";
-import Q from "q";
 
 /**
  * Provides the feature to manage attribute of GOML.
@@ -48,14 +47,6 @@ class GomlAttribute extends JThreeObjectEEWithID {
    */
   protected __converter: AttributeConverterBase;
 
-  /**
-   * deferred for handling async initializing of attribute.
-   * @type {boolean}
-   */
-  private _deferred: Q.Deferred<GomlAttribute> = null;
-
-  private _initializeSequence: boolean = false;
-
   private _nodeManager: NodeManager;
 
   /**
@@ -70,38 +61,14 @@ class GomlAttribute extends JThreeObjectEEWithID {
     // console.log("initialized", this.ID, this.value);
     if (this.reserved) {
       // overrideが期待されているattributeの初期化
-      // notifyValueChangedでdeferredが解決される
-      // temp時にinitializeSequenceが開始される
-      // 一箇所でpromiseを集めるための処置
-      this._initializeSequence = true;
     } else if (!this.constant && this.listeners("changed").length !== 0) {
       // 通常時のAttributeの初期化
-      // onchangeのイベントのコールバック内でdoneでdeferredが解決される
-      this._initializeSequence = true;
-      if (this._nodeManager.attributePromiseRegistry.enabled) {
-        this._deferred = Q.defer<GomlAttribute>();
-        this._nodeManager.attributePromiseRegistry.register(this._deferred.promise, this);
-      }
       this.emit("changed", this);
     } else {
       // onchangeハンドラが無い、又は定数の場合はpromiseを生成しない。
-      this.initialized = true;
       // console.log("resolve attribute (inst)", this.Name);
     }
-  }
-
-  /**
-   * This method must be called inside onchange event callback.
-   */
-  public done(): void {
-    if (this._initializeSequence) {
-      this.initialized = true;
-      this._initializeSequence = false;
-      // console.log("resolve attribute (done)", this.Name);
-      if (this._nodeManager.attributePromiseRegistry.enabled) {
-        this._deferred.resolve(this);
-      }
-    }
+    this.initialized = true;
   }
 
   public get Name(): string {
@@ -169,11 +136,7 @@ class GomlAttribute extends JThreeObjectEEWithID {
     if (this.constant) {
       return;
     }
-    if (this.initialized || this._initializeSequence) {
-      if (this._initializeSequence) {
-        this._deferred = Q.defer<GomlAttribute>();
-        this._nodeManager.attributePromiseRegistry.register(this._deferred.promise, this);
-      }
+    if (this.initialized) {
       this.emit("changed", this);
     }
   }
