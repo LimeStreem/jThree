@@ -22,16 +22,12 @@ class MaterialNode extends MaterialNodeBase<Material> {
   private _onTypeAttrChanged(attr: GomlAttribute): void {
     let material = this.__getMaterialFromMatName(attr.Value);
     if (material) {
-      this.__setMaterial(material, () => {
-        attr.done();
-      });
+      this.__setMaterial(material);
     } else {
       this.nodeImport("jthree.import", `material-${attr.Value}`, (node: GomlTreeNodeBase) => {
         if (node) {
           material = this.__getMaterialFromMatName(attr.Value);
-          this.__setMaterial(material, () => {
-            attr.done();
-          });
+          this.__setMaterial(material);
         }
       });
     }
