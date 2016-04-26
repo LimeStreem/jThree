@@ -346,6 +346,7 @@
     "./src/Node/Converter/Vector3Converter.ts",
     "./src/Node/NodeBase.ts",
     "./src/Node/NodeManager.ts",
+    "./src/Node/NodeUtility.ts",
     "./src/PMX/Core/Materials/PMXGBufferMaterial.ts",
     "./src/PMX/Core/Materials/PMXHitAreaMaterial.ts",
     "./src/PMX/Core/Materials/PMXMaterial.ts",

@@ -6,6 +6,9 @@ import isNumber from "lodash.isnumber";
 /**
  * This is the base class of node.
  * All node classes are inherited from this.
+ *
+ * Attributes changes will be notified only when the node is mounted.
+ * When the node is mounted, the children of the node will be mounted recursively.
  */
 class NodeBase extends JThreeObjectEEWithID {
   public element: HTMLElement;
@@ -16,6 +19,14 @@ class NodeBase extends JThreeObjectEEWithID {
 
   constructor() {
     super();
+    this.on("on-mount", () => {
+      const cb = this.__onMount;
+      if (cb) { cb.bind(this)(); }
+    });
+    this.on("on-unmount", () => {
+      const cb = this.__onUnmount;
+      if (cb) { cb.bind(this)(); }
+    });
   }
 
   /**
@@ -136,6 +147,24 @@ class NodeBase extends JThreeObjectEEWithID {
   public get index(): number {
     return this.__parent.__children.indexOf(this);
   }
+
+  /**
+   * This method is called when this node is mounted to available tree.
+   * If you change attribute here, no events are fired.
+   * This method should be overridden.
+   */
+  protected __onMount(): void {
+    return;
+  };
+
+  /**
+   * This method is called when this node is unmounted from available tree.
+   * You can still access parent.
+   * This method should be overridden.
+   */
+  protected __onUnmount(): void {
+    return;
+  };
 }
 
 export default NodeBase;
