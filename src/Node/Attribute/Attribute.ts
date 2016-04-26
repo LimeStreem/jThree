@@ -5,8 +5,14 @@ import StringConverter from "../Converter/StringConverter";
 /**
  * Management a single attribute with specified type. Converter will serve a value with object with any type instead of string.
  * When attribute is changed, emit a "change" event. When attribute is requested, emit a "get" event.
+ * If initialized flag is not true, event will not be emitted.
  */
 class Attribute extends JThreeObjectEEWithID {
+  /**
+   * If this flag is not true, event will not be emitted.
+   * Recommend you to make this property true by calling initialized method.
+   * @type {boolean}
+   */
   public initialized: boolean = false;
   private _key: string;
   private _value: any;
@@ -26,6 +32,14 @@ class Attribute extends JThreeObjectEEWithID {
     this._key = key;
     this._value = value;
     this._converter = converter ? converter : new StringConverter();
+  }
+
+  /**
+   * Emit a "change" event and obviously make initialized flag true.
+   */
+  public initialize(): void {
+    this.initialized = true;
+    this.emit("change");
   }
 
   /**

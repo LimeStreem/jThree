@@ -11,12 +11,17 @@ class AttributesContainer {
     this._node = node;
   }
 
+  /**
+   * Set attribute with key and value. If not defined, create a new one.
+   * @param {string} key   [description]
+   * @param {any}    value [description]
+   */
   public set(key: string, value: any): void {
     const attr = this._members[key];
     if (attr) {
       attr.setValue(value);
     } else {
-      const newAttr = new Attribute(key, value, "string", false);
+      const newAttr = new Attribute(key, value, null, false);
       this._members[key] = newAttr;
     }
   }
@@ -25,18 +30,6 @@ class AttributesContainer {
     const attr = this._members[key];
     if (attr) {
     }
-  }
-
-  private _add<T>(key: string, value: T, converter: string, constant: boolean, onchange: (T) => void, onget: () => T): void {
-    const converter = new ConverterList[decl.converter.toLowerCase()];
-    const newAttr = new Attribute(key, decl.default, converter, decl.constant);
-    if (decl.onchange) {
-      newAttr.on("change", decl.onchange);
-    }
-    if (decl.onget) {
-      newAttr.on("get", decl.onget);
-    }
-    this._members[key] = newAttr;
   }
 }
 
