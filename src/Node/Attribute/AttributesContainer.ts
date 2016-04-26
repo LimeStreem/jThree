@@ -38,6 +38,16 @@ class AttributesContainer {
   }
 
   /**
+   * Set responsive flag to all attributes object.
+   * @param {boolean} flag Whether responsive or not.
+   */
+  public setResponsive(flag: boolean): void {
+    Object.keys(this._members).forEach((key) => {
+      this._members[key].setResponsive(flag);
+    });
+  }
+
+  /**
    * Sync not synced attributes with element's attributes.
    */
   public syncWithElement(): void {

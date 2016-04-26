@@ -5,15 +5,15 @@ import StringConverter from "../Converter/StringConverter";
 /**
  * Management a single attribute with specified type. Converter will serve a value with object with any type instead of string.
  * When attribute is changed, emit a "change" event. When attribute is requested, emit a "get" event.
- * If initialized flag is not true, event will not be emitted.
+ * If responsive flag is not true, event will not be emitted.
  */
 class Attribute extends JThreeObjectEEWithID {
   /**
    * If this flag is not true, event will not be emitted.
-   * Recommend you to make this property true by calling initialized method.
+   * Recommend you to make this property true by calling responsive method.
    * @type {boolean}
    */
-  public initialized: boolean = false;
+  public responsive: boolean = false;
   public constant: boolean = false;
   private _key: string;
   private _value: any;
@@ -36,11 +36,14 @@ class Attribute extends JThreeObjectEEWithID {
   }
 
   /**
-   * Emit a "change" event and obviously make initialized flag true.
+   * Emit a "change" event and obviously change responsive flag.
+   * @param {boolean} flag Whether responsive or not.
    */
-  public initialize(): void {
-    this.initialized = true;
-    this.emit("change");
+  public setResponsive(flag: boolean): void {
+    this.responsive = flag;
+    if (this.responsive) {
+      this.emit("change");
+    }
   }
 
   /**
@@ -100,7 +103,7 @@ class Attribute extends JThreeObjectEEWithID {
       }
       this._value = val;
     }
-    if (this.initialized) {
+    if (this.responsive) {
       this.emit("change", this);
     }
   }

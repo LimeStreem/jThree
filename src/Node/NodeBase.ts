@@ -110,6 +110,10 @@ class NodeBase extends JThreeObjectEEWithID {
     return this._mounted;
   }
 
+  /**
+   * Update mounted status and emit events
+   * @param {boolean} mounted Mounted status.
+   */
   public setMounted(mounted: boolean): void {
     if ((mounted && !this._mounted) || (!mounted && this._mounted)) {
       this._mounted = mounted;
@@ -118,10 +122,19 @@ class NodeBase extends JThreeObjectEEWithID {
       } else {
         this.emit("on-unmount");
       }
+      this._attributes.setResponsive(true);
       this.__children.forEach((child) => {
         child.setMounted(mounted);
       });
     }
+  }
+
+  /**
+   * get index of this node from parent.
+   * @return {number} [description]
+   */
+  public get index(): number {
+    return this.__parent.__children.indexOf(this);
   }
 }
 
