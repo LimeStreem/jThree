@@ -6,10 +6,10 @@ import JThreeObjectEEWithID from "../Base/JThreeObjectEEWithID";
  * All node classes are inherited from this.
  */
 class NodeBase extends JThreeObjectEEWithID {
-  public attributes: AttributesContainer;
   public element: HTMLElement;
   protected __children: NodeBase[] = [];
   protected __parent: NodeBase;
+  private _attributes: AttributesContainer;
   private _mounted: boolean = false;
 
   constructor() {
@@ -22,12 +22,39 @@ class NodeBase extends JThreeObjectEEWithID {
    * @param {HTMLElement} element [description]
    */
   public setElement(element: HTMLElement): void {
-    if (!this.attributes) {
-      this.attributes = new AttributesContainer(this, element);
+    if (!this._attributes) {
+      this._attributes = new AttributesContainer(this, element);
       this.element = element;
     } else {
       throw new Error("This method is expected to be called just once.");
     }
+  }
+
+  /**
+   * Set attribute
+   * @param {string} name  attribute name string.
+   * @param {any}    value attribute value.
+   */
+  public setAttribute(name: string, value: any): void {
+    this._attributes.set(name, value);
+  }
+
+  /**
+   * Get attribute.
+   * @param  {string} name attribute name string.
+   * @return {any}         attribute value.
+   */
+  public getAttribute(name: string): any {
+    return this._attributes.get(name);
+  }
+
+  /**
+   * Get attribute.
+   * @param  {string} name attribute name string.
+   * @return {string}      attribute value with string.
+   */
+  public getAttributeString(name: string): string {
+    return this._attributes.getStr(name);
   }
 
   /**
