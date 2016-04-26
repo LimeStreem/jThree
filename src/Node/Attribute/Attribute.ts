@@ -14,10 +14,10 @@ class Attribute extends JThreeObjectEEWithID {
    * @type {boolean}
    */
   public initialized: boolean = false;
+  public constant: boolean = false;
   private _key: string;
   private _value: any;
   private _converter: ConverterBase;
-  private _constant: boolean;
 
   /**
    * Construct a new attribute with name of key and any value with specified type. If constant flag is true, This attribute will be immutable.
@@ -32,7 +32,7 @@ class Attribute extends JThreeObjectEEWithID {
     this._key = key;
     this._value = value;
     this._converter = converter ? converter : new StringConverter();
-    this._constant = !!constant;
+    this.constant = !!constant;
   }
 
   /**
@@ -67,6 +67,7 @@ class Attribute extends JThreeObjectEEWithID {
    * @return {any} value with specified type.
    */
   public value(): any {
+    this.emit("get");
     return this._value;
   }
 
@@ -75,6 +76,7 @@ class Attribute extends JThreeObjectEEWithID {
    * @return {string} value with string.
    */
   public valueStr(): string {
+    this.emit("get");
     return this._value == null ? "" : this._converter.toStringAttr(this._value);
   }
 
@@ -83,7 +85,7 @@ class Attribute extends JThreeObjectEEWithID {
    * @param {any} val Value with string or specified type.
    */
   public setValue(val: any): void {
-    if (this._constant && this._value !== undefined) {
+    if (this.constant && this._value !== undefined) {
       console.warn(`Attribute "${this.id}" is immutable.`);
       return;
     }
