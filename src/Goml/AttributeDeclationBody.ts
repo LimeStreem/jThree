@@ -1,4 +1,4 @@
-﻿import GomlAttribute from "./GomlAttribute";
+﻿import Attribute from "./Attribute";
 
 interface AttributeDeclarationBody {
 	/**
@@ -23,12 +23,12 @@ interface AttributeDeclarationBody {
    */
   reserved?: boolean;
 
-  [other: string]: any;
-
   /**
    * apply to event listener when attribute changed
    */
-  onchanged?: (attr: GomlAttribute) => void;
+  onchanged?: (attr: Attribute) => void;
+
+  onget?: (attr: Attribute) => void;
 }
 
 export default AttributeDeclarationBody;

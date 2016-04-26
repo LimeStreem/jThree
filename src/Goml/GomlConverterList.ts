@@ -3,28 +3,28 @@
  * Converters manage how an attribute will be parsed, converted into string, or animated.
  */
 
-import AngleAttributeConverter from "./Converter/AngleAttributeConverter";
-import NumberAttributeConverter from "./Converter/NumberAttributeConverter";
-import IntegerAttributeConverter from "./Converter/IntegerAttributeConverter";
-import Vector3AttributeConverter from "./Converter/Vector3AttributeConverter";
-import RotationAttributeConverter from "./Converter/RotationAttributeConverter";
-import Color4AttributeConverter from "./Converter/Color4AttributeConverter";
-import Color3AttributeConverter from "./Converter/Color3AttributeConverter";
-import BooleanAttributeConverter from "./Converter/BooleanAttributeConverter";
-import StringAttributeConverter from "./Converter/StringAttributeConverter";
-import FunctionAttributeConverter from "./Converter/FunctionAttributeConverter";
+import AngleConverter from "./Converter/AngleConverter";
+import NumberConverter from "./Converter/NumberConverter";
+import IntegerConverter from "./Converter/IntegerConverter";
+import Vector3Converter from "./Converter/Vector3Converter";
+import RotationConverter from "./Converter/RotationConverter";
+import Color4Converter from "./Converter/Color4Converter";
+import Color3Converter from "./Converter/Color3Converter";
+import BooleanConverter from "./Converter/BooleanConverter";
+import StringConverter from "./Converter/StringConverter";
+import FunctionConverter from "./Converter/FunctionConverter";
 
 const converterList = {
-  "angle": AngleAttributeConverter,
-  "float": NumberAttributeConverter,
-  "int": IntegerAttributeConverter,
-  "vec3": Vector3AttributeConverter,
-  "rotation": RotationAttributeConverter,
-  "color4": Color4AttributeConverter,
-  "color3": Color3AttributeConverter,
-  "boolean": BooleanAttributeConverter,
-  "string": StringAttributeConverter,
-  "function": FunctionAttributeConverter,
+  "angle": AngleConverter,
+  "float": NumberConverter,
+  "int": IntegerConverter,
+  "vec3": Vector3Converter,
+  "rotation": RotationConverter,
+  "color4": Color4Converter,
+  "color3": Color3Converter,
+  "boolean": BooleanConverter,
+  "string": StringConverter,
+  "function": FunctionConverter,
 };
 
 export default converterList;
