@@ -87,6 +87,17 @@ class NodeBase extends JThreeObjectEEWithID {
   }
 
   /**
+   * remove myself
+   */
+  public remove(): void {
+    if (this.__parent) {
+      this.__parent.removeChild(this);
+    } else {
+      throw new Error("root Node cannot be removed.");
+    }
+  }
+
+  /**
    * Set attribute
    * @param {string} name  attribute name string.
    * @param {any}    value attribute value.
