@@ -1,8 +1,8 @@
-import Attributes from "./Attribute/AttributesContainer";
+import AttributesContainer from "./Attribute/AttributesContainer";
 import JThreeObjectEEWithID from "../Base/JThreeObjectEEWithID";
 
 class NodeBase extends JThreeObjectEEWithID {
-  public attributes: Attributes = new Attributes();
+  public attributes: AttributesContainer;
   protected __children: NodeBase[] = [];
   protected __parent: NodeBase;
   private _mounted: boolean = false;
@@ -10,6 +10,7 @@ class NodeBase extends JThreeObjectEEWithID {
 
   constructor() {
     super();
+    this.attributes = new AttributesContainer(this);
   }
 
   public setElement(element: HTMLElement): void {

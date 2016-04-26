@@ -27,8 +27,20 @@ class AttributesContainer {
   }
 
   public define(key: string, decl: AttributeDeclaration): void {
-    const attr = this._members[key];
+    let attr = this._members[key];
+    if (!attr) {
+      attr = new Attribute(key, decl.default, new ConverterList[decl.converter](), decl.constant);
+    }
+    if (decl.onchange) {
+      attr.removeAllListeners();
+      attr.on("change", decl.onchange);
+    }
+    if (decl.onget) {
+      attr.removeAllListeners();
+      attr.on("get", decl.onget);
+    }
     if (attr) {
+      attr.setConverter(new ConverterList[decl.converter]());
     }
   }
 }

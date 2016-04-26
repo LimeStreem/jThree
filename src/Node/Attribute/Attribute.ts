@@ -25,13 +25,14 @@ class Attribute extends JThreeObjectEEWithID {
    * @param {string}        key       Key of this attribute.
    * @param {any}           value     Value of this attribute.
    * @param {ConverterBase} converter Converter of this attribute.
-   * @param {boolean}       constant  Whether this attribute is immutable or not.
+   * @param {boolean}       constant  Whether this attribute is immutable or not. False as default.
    */
   constructor(key: string, value: any, converter: ConverterBase, constant: boolean) {
     super();
     this._key = key;
     this._value = value;
     this._converter = converter ? converter : new StringConverter();
+    this._constant = !!constant;
   }
 
   /**
