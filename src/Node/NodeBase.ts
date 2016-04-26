@@ -7,10 +7,10 @@ import JThreeObjectEEWithID from "../Base/JThreeObjectEEWithID";
  */
 class NodeBase extends JThreeObjectEEWithID {
   public attributes: AttributesContainer;
+  public element: HTMLElement;
   protected __children: NodeBase[] = [];
   protected __parent: NodeBase;
   private _mounted: boolean = false;
-  private _element: HTMLElement;
 
   constructor() {
     super();
@@ -24,14 +24,14 @@ class NodeBase extends JThreeObjectEEWithID {
   public setElement(element: HTMLElement): void {
     if (!this.attributes) {
       this.attributes = new AttributesContainer(this, element);
-      this._element = element;
+      this.element = element;
     } else {
       throw new Error("This method is expected to be called just once.");
     }
   }
 
   /**
-   * Get mounted status
+   * Get mounted status.
    * @return {boolean} Whether this node is mounted or not.
    */
   public get mounted(): boolean {
