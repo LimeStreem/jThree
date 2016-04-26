@@ -1,5 +1,7 @@
 import AttributesContainer from "./Attribute/AttributesContainer";
 import JThreeObjectEEWithID from "../Base/JThreeObjectEEWithID";
+import NodeUtility from "./NodeUtility";
+import isNumber from "lodash.isnumber";
 
 /**
  * This is the base class of node.
@@ -27,6 +29,49 @@ class NodeBase extends JThreeObjectEEWithID {
       this.element = element;
     } else {
       throw new Error("This method is expected to be called just once.");
+    }
+  }
+
+  /**
+   * Add child.
+   * @param {NodeBase} Target node to be inserted.
+   * @param {number}   index Index of insert location in children. If this argument is null or undefined, target will be inserted in last. If this argument is negative number, target will be inserted in index from last.
+   */
+  public addChild(child: NodeBase, index?: number): void {
+    child.__parent = this;
+    if (!isNumber(index) && index != null) {
+      throw new Error("insert index should be number or null or undefined.");
+    }
+    const insertIndex = index == null ? this.__children.length : index;
+    this.__children.splice(insertIndex, 0, child);
+    if (this.mounted()) {
+      child.setMounted(true);
+    }
+    // handling html
+    let referenceElement: HTMLElement = null;
+    if (index != null) {
+      referenceElement = this.element[NodeUtility.getNodeListIndexByElementIndex(this.element, index)];
+    }
+    this.element.insertBefore(child.element, referenceElement);
+  }
+
+  /**
+   * Remove child.
+   * @param {NodeBase} child Target node to be inserted.
+   */
+  public removeChild(child: NodeBase): void {
+    for (let i = 0; i < this.__children.length; i++) {
+      let v = this.__children[i];
+      if (v === child) {
+        child.__parent = null;
+        this.__children.splice(i, 1);
+        if (this.mounted()) {
+          child.setMounted(false);
+        }
+        // html handling
+        child.element.remove();
+        break;
+      }
     }
   }
 
@@ -61,8 +106,22 @@ class NodeBase extends JThreeObjectEEWithID {
    * Get mounted status.
    * @return {boolean} Whether this node is mounted or not.
    */
-  public get mounted(): boolean {
+  public mounted(): boolean {
     return this._mounted;
+  }
+
+  public setMounted(mounted: boolean): void {
+    if ((mounted && !this._mounted) || (!mounted && this._mounted)) {
+      this._mounted = mounted;
+      if (mounted) {
+        this.emit("on-mount");
+      } else {
+        this.emit("on-unmount");
+      }
+      this.__children.forEach((child) => {
+        child.setMounted(mounted);
+      });
+    }
   }
 }
 
