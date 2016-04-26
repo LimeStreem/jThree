@@ -12,6 +12,13 @@ class AttributesContainer {
   private _element: HTMLElement;
 
   /**
+   * The attributes in waiting for syncing with element.
+   * These attributes will be synced when they are required.
+   * @type {string[]}
+   */
+  private _standbyAttr: string[] = [];
+
+  /**
    * Construct attributes with defined attributes in HTMLElement in node.
    * This class is expected to instanciate after element is connected to node.
    * @param {NodeBase} node Related node.
@@ -22,6 +29,22 @@ class AttributesContainer {
     if (!element) {
       throw new Error("Element must be defined.");
     }
+    for (let i = 0; i <= this._element.attributes.length - 1; i++) {
+      let attr = this._element.attributes[i];
+      let key = attr.nodeName;
+      let value = attr.nodeValue;
+      this.set(key, value);
+    }
+  }
+
+  /**
+   * Sync not synced attributes with element's attributes.
+   */
+  public syncWithElement(): void {
+    Object.keys(this._members).forEach((key) => {
+      const attr = this._members[key];
+      this._element.setAttribute(key, attr.valueStr());
+    });
   }
 
   /**
@@ -31,13 +54,14 @@ class AttributesContainer {
    * @param {any}    value Value with any type.
    */
   public set(key: string, value: any): void {
-    const attr = this._members[key];
+    let attr = this._members[key];
     if (attr) {
       attr.setValue(value); // emit change
     } else {
-      const newAttr = new Attribute(key, value, null, false);
-      this._members[key] = newAttr;
+      attr = new Attribute(key, value, null, false);
+      this._members[key] = attr;
     }
+    this._immediateSyncOrStandby(key, attr);
   }
 
   /**
@@ -84,6 +108,22 @@ class AttributesContainer {
     }
     if (isExist) {
       attr.setConverter(new ConverterList[decl.converter]()); // emit change
+    }
+    this._immediateSyncOrStandby(key, attr);
+  }
+
+  /**
+   * Check whether reflect the changes to element immediately or not.
+   * This method is called when attribute is changed.
+   * When key is "id" or "class", sync it immediately.
+   * @param {string}    key  Key string.
+   * @param {Attribute} attr Attribute object.
+   */
+  private _immediateSyncOrStandby(key: string, attr: Attribute): void {
+    if (key === "id" || key === "class") {
+      this._element.setAttribute(key, attr.valueStr());
+    } else {
+      this._standbyAttr.push(key);
     }
   }
 }
