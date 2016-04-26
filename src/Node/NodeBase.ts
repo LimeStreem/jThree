@@ -1,6 +1,10 @@
 import AttributesContainer from "./Attribute/AttributesContainer";
 import JThreeObjectEEWithID from "../Base/JThreeObjectEEWithID";
 
+/**
+ * This is the base class of node.
+ * All node classes are inherited from this.
+ */
 class NodeBase extends JThreeObjectEEWithID {
   public attributes: AttributesContainer;
   protected __children: NodeBase[] = [];
@@ -12,6 +16,11 @@ class NodeBase extends JThreeObjectEEWithID {
     super();
   }
 
+  /**
+   * Connect element to node.
+   * This method is expected to be called just once.
+   * @param {HTMLElement} element [description]
+   */
   public setElement(element: HTMLElement): void {
     if (!this.attributes) {
       this.attributes = new AttributesContainer(this, element);
@@ -22,8 +31,8 @@ class NodeBase extends JThreeObjectEEWithID {
   }
 
   /**
-   * get mounted status
-   * @return {boolean} [description]
+   * Get mounted status
+   * @return {boolean} Whether this node is mounted or not.
    */
   public get mounted(): boolean {
     return this._mounted;
