@@ -30,8 +30,8 @@ class Attribute extends JThreeObjectEEWithID {
   constructor(key: string, value: any, converter: ConverterBase, constant: boolean) {
     super();
     this._key = key;
-    this._value = value;
     this._converter = converter ? converter : new StringConverter();
+    this.setValue(value);
     this.constant = !!constant;
   }
 
@@ -70,7 +70,9 @@ class Attribute extends JThreeObjectEEWithID {
    * @return {any} value with specified type.
    */
   public value(): any {
-    this.emit("get");
+    if (this.responsive) {
+      this.emit("get");
+    }
     return this._value;
   }
 
@@ -79,7 +81,9 @@ class Attribute extends JThreeObjectEEWithID {
    * @return {string} value with string.
    */
   public valueStr(): string {
-    this.emit("get");
+    if (this.responsive) {
+      this.emit("get");
+    }
     return this._value == null ? "" : this._converter.toStringAttr(this._value);
   }
 
@@ -101,7 +105,7 @@ class Attribute extends JThreeObjectEEWithID {
         console.warn(`Type of attribute: ${this._key}(${val}) is not adapt to converter: ${this._converter.getTypeName()}`, val);
         return;
       }
-      this._value = val;
+      this._value = this._converter.toObjectAttr(val);
     }
     if (this.responsive) {
       this.emit("change", this);
