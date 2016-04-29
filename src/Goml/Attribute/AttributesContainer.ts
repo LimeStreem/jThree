@@ -8,7 +8,6 @@ import ConverterList from "../Config/ConverterList";
  */
 class AttributesContainer {
   private _members: { [key: string]: Attribute } = {};
-  private _node: NodeBase;
   private _element: HTMLElement;
 
   /**
@@ -21,10 +20,9 @@ class AttributesContainer {
   /**
    * Construct attributes with defined attributes in HTMLElement in node.
    * This class is expected to instanciate after element is connected to node.
-   * @param {NodeBase} node Related node.
+   * @param {HTMLElement} element [description]
    */
-  constructor(node: NodeBase, element: HTMLElement) {
-    this._node = node;
+  constructor(element: HTMLElement) {
     this._element = element;
     if (!element) {
       throw new Error("Element must be defined.");
