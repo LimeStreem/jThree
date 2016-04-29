@@ -141,3 +141,43 @@ test('When responsive flag is set to true, the chenge event will be emitted.', (
   attr.setResponsive(true);
   t.ok(callbackfn.callCount === 1);
 });
+
+test('If responsive flag is true, the chenge event will be emitted when converter is changed.', (t) => {
+  const key = 'nameofkey';
+  const value = '100';
+  const attr = new Attribute(key, value, null, false);
+  attr.setResponsive(true);
+  const callbackfn = sinon.spy();
+  attr.on('change', callbackfn);
+  attr.setConverter(new NumberConverter());
+  t.ok(callbackfn.callCount === 1);
+});
+
+test('If constant flag is true, value will not be changed.', (t) => {
+  const key = 'nameofkey';
+  const value = 100;
+  const attr = new Attribute(key, value, new NumberConverter(), true);
+  const newValue = 200;
+  attr.setValue(newValue);
+  t.ok(attr.value() === value);
+});
+
+test('If constant flag is true and value is set to undefined, value can be changed.', (t) => {
+  const key = 'nameofkey';
+  const value = undefined;
+  const attr = new Attribute(key, value, new NumberConverter(), true);
+  const newValue = 200;
+  attr.setValue(newValue);
+  t.ok(attr.value() === newValue);
+});
+
+test('If constant flag is true, change event will not be emitted.', (t) => {
+  const key = 'nameofkey';
+  const value = 100;
+  const attr = new Attribute(key, value, new NumberConverter(), true);
+  const callbackfn = sinon.spy();
+  attr.on('change', callbackfn);
+  const newValue = 200;
+  attr.setValue(newValue);
+  t.ok(callbackfn.callCount === 0);
+});
