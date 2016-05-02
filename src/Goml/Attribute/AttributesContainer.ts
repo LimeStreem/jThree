@@ -111,11 +111,11 @@ class AttributesContainer {
       this._members[key] = attr;
     }
     if (decl.onchange) {
-      attr.removeAllListeners();
+      attr.removeAllListeners("change");
       attr.on("change", decl.onchange);
     }
     if (decl.onget) {
-      attr.removeAllListeners();
+      attr.removeAllListeners("get");
       attr.on("get", decl.onget);
     }
     if (isExist) {

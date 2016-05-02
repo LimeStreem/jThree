@@ -3,9 +3,7 @@ import sinon from 'sinon';
 import XMLDOM from 'xmldom';
 const DOMParser = XMLDOM.DOMParser;
 
-import Attribute from '../../../lib/Goml/Attribute/Attribute';
 import AttributesContainer from '../../../lib/Goml/Attribute/AttributesContainer';
-import NumberConverter from '../../../lib/Goml/Converter/NumberConverter';
 
 test('Construct attribute container with correct attribute to element', (t) => {
   const element = new DOMParser().parseFromString('<tag id="test"></tag>', 'text/xml').documentElement;
@@ -142,4 +140,32 @@ test('If new attribute is defined, correct Attribute will be constructed. (with 
     converter: 'int',
   });
   t.truthy(attributesContainer.get('new_defined_attribute') === 10);
+});
+
+test('If existed attribute is defined, Attribute will be updated except for value.', (t) => {
+  const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+  const attributesContainer = new AttributesContainer(element);
+  attributesContainer.set('existed_defined_attribute', '5');
+  attributesContainer.define('existed_defined_attribute', {
+    default: 10,
+    converter: 'int',
+  });
+  t.truthy(attributesContainer.get('existed_defined_attribute') === 5);
+});
+
+test('If new attribute is defined, event will be correctly bound.', (t) => {
+  const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+  const attributesContainer = new AttributesContainer(element);
+  const onchangeHandler = sinon.spy();
+  const ongetHandler = sinon.spy();
+  attributesContainer.define('existed_defined_attribute', {
+    default: 10,
+    converter: 'int',
+    onchange: onchangeHandler,
+    onget: ongetHandler,
+  });
+  attributesContainer.setResponsive(true);
+  t.truthy(onchangeHandler.callCount === 1);
+  attributesContainer.get('existed_defined_attribute');
+  t.truthy(ongetHandler.callCount === 1);
 });
