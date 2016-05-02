@@ -99,11 +99,16 @@ class AttributesContainer {
    */
   public define(key: string, decl: AttributeDeclaration): void {
     let attr = this._members[key];
+    if (decl.converter && typeof ConverterList[decl.converter] === "undefined") {
+      throw new Error(`Converter "${decl.converter}" is not found.`);
+    }
+    const converter = decl.converter ? new ConverterList[decl.converter]() : new ConverterList["string"]();
     const isExist = !!attr;
     if (isExist) {
       attr.constant = decl.constant;
     } else {
-      attr = new Attribute(key, decl.default, new ConverterList[decl.converter](), decl.constant);
+      attr = new Attribute(key, decl.default, converter, decl.constant);
+      this._members[key] = attr;
     }
     if (decl.onchange) {
       attr.removeAllListeners();
@@ -114,7 +119,7 @@ class AttributesContainer {
       attr.on("get", decl.onget);
     }
     if (isExist) {
-      attr.setConverter(new ConverterList[decl.converter]()); // emit change
+      attr.setConverter(converter); // emit change
     }
     this._immediateSyncOrStandby(key, attr);
   }

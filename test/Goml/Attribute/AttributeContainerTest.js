@@ -100,16 +100,46 @@ test('If new attribute is set, correct Attribute will be constructed.', (t) => {
   t.truthy(attributesContainer.get('new_set_attribute') === 'new_set_attribute_test');
 });
 
-// test('If new attribute is defined, attribute count will be increase.', (t) => {
-//   const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
-//   const attributesContainer = new AttributesContainer(element);
-//   attributesContainer.set('new_defined_attribute', 'new_defined_attribute_test');
-//   t.truthy(Object.keys(attributesContainer._members).length === 4);
-// });
+test('If new attribute is defined, attribute count will be increase.', (t) => {
+  const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+  const attributesContainer = new AttributesContainer(element);
+  attributesContainer.define('new_defined_attribute', {
+    default: 'new_defined_attribute_test',
+  });
+  t.truthy(Object.keys(attributesContainer._members).length === 4);
+});
 
-// test('If new attribute is defined, correct Attribute will be constructed.', (t) => {
-//   const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
-//   const attributesContainer = new AttributesContainer(element);
-//   attributesContainer.set('new_defined_attribute', 'new_defined_attribute_test');
-//   t.truthy(attributesContainer.get('new_defined_attribute') === 'new_defined_attribute_test');
-// });
+test('If new attribute is defined, correct Attribute will be constructed.', (t) => {
+  const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+  const attributesContainer = new AttributesContainer(element);
+  attributesContainer.define('new_defined_attribute', {
+    default: 'new_defined_attribute_test',
+    converter: 'string',
+  });
+  t.truthy(attributesContainer.get('new_defined_attribute') === 'new_defined_attribute_test');
+});
+
+test('If new attribute is defined with unknown converter, error will be thrown.', (t) => {
+  const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+  const attributesContainer = new AttributesContainer(element);
+  try {
+    attributesContainer.define('new_defined_attribute', {
+      default: 'new_defined_attribute_test',
+      converter: 'unknown',
+    });
+    t.fail();
+  } catch (e) {
+    t.truthy(e instanceof Error);
+    t.truthy(e.message === 'Converter "unknown" is not found.');
+  }
+});
+
+test('If new attribute is defined, correct Attribute will be constructed. (with int converter)', (t) => {
+  const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+  const attributesContainer = new AttributesContainer(element);
+  attributesContainer.define('new_defined_attribute', {
+    default: 10,
+    converter: 'int',
+  });
+  t.truthy(attributesContainer.get('new_defined_attribute') === 10);
+});
