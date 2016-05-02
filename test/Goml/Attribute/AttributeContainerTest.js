@@ -158,14 +158,33 @@ test('If new attribute is defined, event will be correctly bound.', (t) => {
   const attributesContainer = new AttributesContainer(element);
   const onchangeHandler = sinon.spy();
   const ongetHandler = sinon.spy();
-  attributesContainer.define('existed_defined_attribute', {
+  attributesContainer.define('event_bound_attribute', {
     default: 10,
     converter: 'int',
     onchange: onchangeHandler,
     onget: ongetHandler,
   });
+  t.truthy(attributesContainer._members.event_bound_attribute.listeners('change').length === 1);
+  t.truthy(attributesContainer._members.event_bound_attribute.listeners('get').length === 1);
   attributesContainer.setResponsive(true);
   t.truthy(onchangeHandler.callCount === 1);
-  attributesContainer.get('existed_defined_attribute');
+  attributesContainer.get('event_bound_attribute');
   t.truthy(ongetHandler.callCount === 1);
+});
+
+test('If event is bound but responsive flag is false, event will not be emitted.', (t) => {
+  const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+  const attributesContainer = new AttributesContainer(element);
+  const onchangeHandler = sinon.spy();
+  const ongetHandler = sinon.spy();
+  attributesContainer.define('event_bound_attribute', {
+    default: 10,
+    converter: 'int',
+    onchange: onchangeHandler,
+    onget: ongetHandler,
+  });
+  attributesContainer.setResponsive(false);
+  t.truthy(onchangeHandler.callCount === 0);
+  attributesContainer.get('event_bound_attribute');
+  t.truthy(ongetHandler.callCount === 0);
 });
