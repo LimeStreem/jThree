@@ -132,7 +132,7 @@ test('If new attribute is defined with unknown converter, error will be thrown.'
   }
 });
 
-test('If new attribute is defined, correct Attribute will be constructed. (with int converter)', (t) => {
+test('If new attribute is defined with converter (int), specified type of value will be returned.', (t) => {
   const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
   const attributesContainer = new AttributesContainer(element);
   attributesContainer.define('new_defined_attribute', {
@@ -140,6 +140,16 @@ test('If new attribute is defined, correct Attribute will be constructed. (with 
     converter: 'int',
   });
   t.truthy(attributesContainer.get('new_defined_attribute') === 10);
+});
+
+test('If new attribute is defined with converter (int), string type of value will be returned by #getStr.', (t) => {
+  const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+  const attributesContainer = new AttributesContainer(element);
+  attributesContainer.define('new_defined_attribute', {
+    default: 10,
+    converter: 'int',
+  });
+  t.truthy(attributesContainer.getStr('new_defined_attribute') === '10');
 });
 
 test('If existed attribute is defined, Attribute will be updated except for value.', (t) => {
