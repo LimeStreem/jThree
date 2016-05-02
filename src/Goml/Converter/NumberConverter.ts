@@ -6,19 +6,15 @@ class NumberConverter extends ConverterBase {
   public name: string = "float";
 
   public toStringAttr(val: any): string {
-    if (isString(val) || isNumber(val)) {
-      return val.toString();
-    } else {
-      throw new Error("Input value is not a number or string");
-    }
+    return val.toString();
   }
 
   public toObjectAttr(attr: any): number {
-    if (isString(attr) || isNumber(attr)) {
-      return Number(attr);
-    } else {
-      throw new Error("Input value is not a number or string");
-    }
+    return Number(attr);
+  }
+
+  public validate(attr: any): boolean {
+    return isNumber(attr);
   }
 }
 

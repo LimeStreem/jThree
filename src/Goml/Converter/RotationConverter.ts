@@ -12,6 +12,10 @@ class RotationConverter extends JThreeObject {
   public toObjectAttr(attr: any): Quaternion {
     return attr instanceof Quaternion ? attr : AttributeParser.parseRotation3D(attr);
   }
+
+  public validate(attr: any): boolean {
+    return attr instanceof Quaternion;
+  }
 }
 
 export default RotationConverter;

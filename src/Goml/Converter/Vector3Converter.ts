@@ -9,6 +9,10 @@ class Vector3Converter extends ConverterBase {
   public toObjectAttr(attr: any): Vector3 {
     return attr instanceof Vector3 ? attr : Vector3.parse(attr);
   }
+
+  public validate(attr: any): boolean {
+    return attr instanceof Vector3;
+  }
 }
 
 export default Vector3Converter;

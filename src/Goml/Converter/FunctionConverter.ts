@@ -11,6 +11,10 @@ class FunctionConverter extends ConverterBase {
   public toObjectAttr(attr: any): () => any {
     return isFunction(attr) ? attr : new Function(attr);
   }
+
+  public validate(attr: any): boolean {
+    return isFunction(attr);
+  }
 }
 
 export default FunctionConverter;

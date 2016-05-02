@@ -16,6 +16,13 @@ abstract class ConverterBase extends JThreeObject {
    * @return {any}      Value with specified type.
    */
   public abstract toObjectAttr(val: any): any;
+
+  /**
+   * Validate the compatibility of converter type.
+   * @param  {any}     val Value for check
+   * @return {boolean}     Valid or not
+   */
+  public abstract validate(val: any): boolean;
 }
 
 export default ConverterBase;

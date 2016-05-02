@@ -12,6 +12,10 @@ class AngleConverter extends ConverterBase {
   public toObjectAttr(attr: any): number {
     return isNumber(attr) ? attr : AttributeParser.parseAngle(attr);
   }
+
+  public validate(attr: any): boolean {
+    return isNumber(attr);
+  }
 }
 
 export default AngleConverter;

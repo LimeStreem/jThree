@@ -1,6 +1,7 @@
 import JThreeObjectEEWithID from "../../Base/JThreeObjectEEWithID";
 import ConverterBase from "../Converter/ConverterBase";
 import StringConverter from "../Converter/StringConverter";
+import isString from "lodash.isstring";
 
 /**
  * Management a single attribute with specified type. Converter will serve a value with object with any type instead of string.
@@ -96,16 +97,15 @@ class Attribute extends JThreeObjectEEWithID {
       console.warn(`Attribute "${this.id}" is immutable.`);
       return;
     }
-    if (typeof val === "string") {
+    if (isString(val)) {
       this._value = this._converter.toObjectAttr(val);
     } else {
-      try {
-        this._converter.toStringAttr(val);
-      } catch (e) {
+      if (this._converter.validate(val)) {
+        this._value = this._converter.toObjectAttr(val);
+      } else {
         console.warn(`Type of attribute: ${this._key}(${val}) is not adapt to converter: ${this._converter.getTypeName()}`, val);
         return;
       }
-      this._value = this._converter.toObjectAttr(val);
     }
     if (this.responsive) {
       this.emit("change", this);

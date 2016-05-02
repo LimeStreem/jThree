@@ -1,4 +1,5 @@
 import ConverterBase from "./ConverterBase";
+import isNumber from "lodash.isnumber";
 
 class IntegerConverter extends ConverterBase {
   public name: string = "int";
@@ -9,6 +10,10 @@ class IntegerConverter extends ConverterBase {
 
   public toObjectAttr(attr: any): number {
     return parseInt(attr, 10);
+  }
+
+  public validate(attr: any): boolean {
+    return isNumber(attr);
   }
 }
 
