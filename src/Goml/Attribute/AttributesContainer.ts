@@ -30,7 +30,7 @@ class AttributesContainer {
       let attr = this._element.attributes[i];
       let key = attr.nodeName;
       let value = attr.nodeValue;
-      this.set(key, value);
+      this._setOrCreateNewAttribute(key, value);
     }
   }
 
@@ -57,17 +57,12 @@ class AttributesContainer {
   /**
    * Set attribute with key and value. If not defined, create a new one.
    * "change" event will be emitted if target attribute is exist.
+   * When attribute's key is "id" or "class", sync to the original element.
    * @param {string} key   Key string.
    * @param {any}    value Value with any type.
    */
   public set(key: string, value: any): void {
-    let attr = this._members[key];
-    if (attr) {
-      attr.setValue(value); // emit change
-    } else {
-      attr = new Attribute(key, value, null, false);
-      this._members[key] = attr;
-    }
+    const attr = this._setOrCreateNewAttribute(key, value);
     this._immediateSyncOrStandby(key, attr);
   }
 
@@ -83,6 +78,11 @@ class AttributesContainer {
     }
   }
 
+  /**
+   * Get attribute with string.
+   * @param  {string} key Key string.
+   * @return {string}     Value with specified type.
+   */
   public getStr(key: string): string {
     const attr = this._members[key];
     if (attr) {
@@ -117,6 +117,23 @@ class AttributesContainer {
       attr.setConverter(new ConverterList[decl.converter]()); // emit change
     }
     this._immediateSyncOrStandby(key, attr);
+  }
+
+  /**
+   * Set the value of attribute or create new attribute if it is not exist.
+   * @param  {string}    key   Key string.
+   * @param  {any}       value Value with specified type.
+   * @return {Attribute}       Targeted Attribute object.
+   */
+  private _setOrCreateNewAttribute(key: string, value: any): Attribute {
+    let attr = this._members[key];
+    if (attr) {
+      attr.setValue(value); // emit change
+    } else {
+      attr = new Attribute(key, value, null, false);
+      this._members[key] = attr;
+    }
+    return attr;
   }
 
   /**

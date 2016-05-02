@@ -41,7 +41,7 @@ test('If value of attribute "id" is set, value will be correctly changed.', (t) 
   t.truthy(attributesContainer.get('id') === 'id_test_changed');
 });
 
-test('If value of attribute "id" is set, value will be correctly reflect to original element.', (t) => {
+test('If value of attribute "id" is set, value will be correctly reflected to original element.', (t) => {
   const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
   const attributesContainer = new AttributesContainer(element);
   attributesContainer.set('id', 'id_test_changed');
@@ -56,7 +56,7 @@ test('If value of attribute "class" is set, value will be correctly changed.', (
   t.truthy(attributesContainer.get('class') === 'class_test_changed');
 });
 
-test('If value of attribute "class" is set, value will be correctly reflect to original element.', (t) => {
+test('If value of attribute "class" is set, value will be correctly reflected to original element.', (t) => {
   const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
   const attributesContainer = new AttributesContainer(element);
   attributesContainer.set('class', 'class_test_changed');
@@ -71,9 +71,45 @@ test('If value of attribute "any_attribute" is set, value will be correctly chan
   t.truthy(attributesContainer.get('any_attribute') === 'any_attribute_test_changed');
 });
 
-test('If value of attribute "any_attribute" is set, value will not be reflect to original element.', (t) => {
+test('If value of attribute "any_attribute" is set, value will not be reflected to original element.', (t) => {
   const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
   const attributesContainer = new AttributesContainer(element);
   attributesContainer.set('any_attribute', 'any_attribute_test_changed');
   t.truthy(element.getAttribute('any_attribute') === 'any_attribute_test');
 });
+
+test('If value of attribute "any_attribute" is set and syncWithElement is called, value will be correctly reflected to original element.', (t) => {
+  const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+  const attributesContainer = new AttributesContainer(element);
+  attributesContainer.set('any_attribute', 'any_attribute_test_changed');
+  attributesContainer.syncWithElement();
+  t.truthy(element.getAttribute('any_attribute') === 'any_attribute_test_changed');
+});
+
+test('If new attribute is set, attribute count will be increase.', (t) => {
+  const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+  const attributesContainer = new AttributesContainer(element);
+  attributesContainer.set('new_set_attribute', 'new_set_attribute_test');
+  t.truthy(Object.keys(attributesContainer._members).length === 4);
+});
+
+test('If new attribute is set, correct Attribute will be constructed.', (t) => {
+  const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+  const attributesContainer = new AttributesContainer(element);
+  attributesContainer.set('new_set_attribute', 'new_set_attribute_test');
+  t.truthy(attributesContainer.get('new_set_attribute') === 'new_set_attribute_test');
+});
+
+// test('If new attribute is defined, attribute count will be increase.', (t) => {
+//   const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+//   const attributesContainer = new AttributesContainer(element);
+//   attributesContainer.set('new_defined_attribute', 'new_defined_attribute_test');
+//   t.truthy(Object.keys(attributesContainer._members).length === 4);
+// });
+
+// test('If new attribute is defined, correct Attribute will be constructed.', (t) => {
+//   const element = new DOMParser().parseFromString('<tag id="id_test" class="class_test" any_attribute="any_attribute_test"></tag>', 'text/xml').documentElement;
+//   const attributesContainer = new AttributesContainer(element);
+//   attributesContainer.set('new_defined_attribute', 'new_defined_attribute_test');
+//   t.truthy(attributesContainer.get('new_defined_attribute') === 'new_defined_attribute_test');
+// });
