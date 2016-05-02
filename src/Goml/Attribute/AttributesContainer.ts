@@ -1,6 +1,5 @@
 import AttributeDeclaration from "./AttributeDeclaration";
 import Attribute from "./Attribute";
-import NodeBase from "../Node/NodeBase";
 import ConverterList from "../Config/ConverterList";
 
 /**
