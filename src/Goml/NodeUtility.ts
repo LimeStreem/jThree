@@ -6,11 +6,13 @@ class NodeUtility {
    * @return {number}                    Index in NodeList
    */
   public static getNodeListIndexByElementIndex(targetElement: HTMLElement, elementIndex: number): number {
-    const nodeListArray: Node[] = Array.prototype.slice.call(targetElement.childNodes);
-    elementIndex = elementIndex < 0 ? nodeListArray.length + elementIndex : elementIndex;
-    return nodeListArray.indexOf(nodeListArray.filter((v) => {
+    const nodeArray: Node[] = Array.prototype.slice.call(targetElement.childNodes);
+    const elementArray = nodeArray.filter((v) => {
       return v.nodeType === 1;
-    })[elementIndex]);
+    });
+    elementIndex = elementIndex < 0 ? elementArray.length + elementIndex : elementIndex;
+    const index = nodeArray.indexOf(elementArray[elementIndex]);
+    return index === -1 ? null : index;
   }
 }
 
