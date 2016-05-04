@@ -11,7 +11,7 @@ class Watch
       when 'watch:main'
         return ['watch:enable', 'build:main', 'server', 'watch:reload']
       when 'watch:main:ts'
-        return ['watch:enable', 'build:main:ts']
+        return ['watch:enable', 'build:main:ts', 'build:main:others']
       when 'watch:test'
         return ['watch:enable', 'build:main', 'watch-mocha']
       when 'default'

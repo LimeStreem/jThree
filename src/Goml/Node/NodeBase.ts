@@ -36,7 +36,7 @@ class NodeBase extends JThreeObjectEEWithID {
    */
   public setElement(element: HTMLElement): void {
     if (!this._attributes) {
-      this._attributes = new AttributesContainer(this, element);
+      this._attributes = new AttributesContainer(element);
       this.element = element;
     } else {
       throw new Error("This method is expected to be called just once.");

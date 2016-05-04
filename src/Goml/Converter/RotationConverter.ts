@@ -1,5 +1,5 @@
 import JThreeObject from "../../Base/JThreeObject";
-import AttributeParser from "../AttributeParser";
+import AttributeParser from "../Attribute/AttributeParser";
 import Quaternion from "../../Math/Quaternion";
 
 class RotationConverter extends JThreeObject {

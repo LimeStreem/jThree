@@ -1,4 +1,4 @@
-import AttributeParser from "../AttributeParser";
+import AttributeParser from "../Attribute/AttributeParser";
 import ConverterBase from "./ConverterBase";
 import isNumber from "lodash.isnumber";
 
