@@ -1,6 +1,6 @@
-import AttributesContainer from "./Attribute/AttributesContainer";
-import JThreeObjectEEWithID from "../Base/JThreeObjectEEWithID";
-import NodeUtility from "./NodeUtility";
+import AttributesContainer from "../Attribute/AttributesContainer";
+import JThreeObjectEEWithID from "../../Base/JThreeObjectEEWithID";
+import NodeUtility from "../NodeUtility";
 import isNumber from "lodash.isnumber";
 
 /**
@@ -12,8 +12,8 @@ import isNumber from "lodash.isnumber";
  */
 class NodeBase extends JThreeObjectEEWithID {
   public element: HTMLElement;
-  protected __children: NodeBase[] = [];
-  protected __parent: NodeBase;
+  public children: NodeBase[] = [];
+  public parent: NodeBase;
   private _attributes: AttributesContainer;
   private _mounted: boolean = false;
 
@@ -49,12 +49,12 @@ class NodeBase extends JThreeObjectEEWithID {
    * @param {number}   index Index of insert location in children. If this argument is null or undefined, target will be inserted in last. If this argument is negative number, target will be inserted in index from last.
    */
   public addChild(child: NodeBase, index?: number): void {
-    child.__parent = this;
+    child.parent = this;
     if (!isNumber(index) && index != null) {
       throw new Error("insert index should be number or null or undefined.");
     }
-    const insertIndex = index == null ? this.__children.length : index;
-    this.__children.splice(insertIndex, 0, child);
+    const insertIndex = index == null ? this.children.length : index;
+    this.children.splice(insertIndex, 0, child);
     if (this.mounted()) {
       child.setMounted(true);
     }
@@ -71,11 +71,11 @@ class NodeBase extends JThreeObjectEEWithID {
    * @param {NodeBase} child Target node to be inserted.
    */
   public removeChild(child: NodeBase): void {
-    for (let i = 0; i < this.__children.length; i++) {
-      let v = this.__children[i];
+    for (let i = 0; i < this.children.length; i++) {
+      let v = this.children[i];
       if (v === child) {
-        child.__parent = null;
-        this.__children.splice(i, 1);
+        child.parent = null;
+        this.children.splice(i, 1);
         if (this.mounted()) {
           child.setMounted(false);
         }
@@ -90,8 +90,8 @@ class NodeBase extends JThreeObjectEEWithID {
    * Remove myself.
    */
   public remove(): void {
-    if (this.__parent) {
-      this.__parent.removeChild(this);
+    if (this.parent) {
+      this.parent.removeChild(this);
     } else {
       throw new Error("root Node cannot be removed.");
     }
@@ -145,7 +145,7 @@ class NodeBase extends JThreeObjectEEWithID {
         this.emit("on-unmount");
       }
       this._attributes.setResponsive(true);
-      this.__children.forEach((child) => {
+      this.children.forEach((child) => {
         child.setMounted(mounted);
       });
     }
@@ -156,7 +156,7 @@ class NodeBase extends JThreeObjectEEWithID {
    * @return {number} number of index.
    */
   public index(): number {
-    return this.__parent.__children.indexOf(this);
+    return this.parent.children.indexOf(this);
   }
 
   /**
